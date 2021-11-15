@@ -1,18 +1,18 @@
 <html>
 <head>
-{{ pagedown.include_pagedown() }}
+{{ mathdown.include_mathdown() }}
 <style>
-.flask-pagedown-input {
+.flask-mathdown-input {
 }
-.flask-pagedown-preview {
+.flask-mathdown-preview {
     border: 1px dotted black;
     background-color: #f0f0f0;
 }
 </style>
 </head>
 <body>
-    <h1>Flask-PageDown Demo</h1>
-    {% if text or text2 %}
+    <h1>Flask-MathDown Demo</h1>
+	{% if text or text2 %}
     <div>
         <p>Received text was:</p>
         <pre>{{ text }}</pre>
@@ -24,15 +24,15 @@
         <form method="POST">
             {{ form.hidden_tag() }}
             <div>
-                <b>{{ form.pagedown.label }}</b>:
-                {{ form.pagedown(rows=10, style='width:100%') }}
+                <b>{{ form.mathdown.label }}</b>:
+                {{ form.mathdown(rows=10, style='width:100%') }}
             </div>
             <br>
             <div>
-                {{ form.pagedown2(only_preview=True) }}
+                {{ form.mathdown2(only_preview=True) }}
                 <br>
-                <b>{{ form.pagedown2.label }}</b>:
-                {{ form.pagedown2(only_input=True, rows=10, style='width:100%') }}
+                <b>{{ form.mathdown2.label }}</b>:
+                {{ form.mathdown2(only_input=True, rows=10, style='width:100%') }}
             </div>
             <div>{{ form.submit() }}</div>
         </form>
