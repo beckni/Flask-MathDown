@@ -1,9 +1,10 @@
-from markupsafe import Markup
+from markupsafe import Markup, escape
 from flask import Blueprint, current_app, url_for
 
 
 class _mathdown(object):
-    def include_mathdown(self):
+
+    def html_head(self):
         html = Markup(''' <script type="text/x-mathjax-config">
 	MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
 		tex2jax: { inlineMath: [ ["$", "$"], ["\\\\(","\\\\)"] ], displayMath: [ ["$$","$$"], ["\\[", "\\]"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno" },
@@ -12,15 +13,34 @@ class _mathdown(object):
  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML-full"></script>
  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/pagedown/1.0/Markdown.Converter.min.js"></script>
  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/pagedown/1.0/Markdown.Sanitizer.min.js"></script>
- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/pagedown/1.0/Markdown.Editor.min.js"></script>
-''')  # noqa: E501
+ ''')
+        return html
+
+    def include_mathdown_editor(self):
+        html = self.html_head()
+        html += Markup(' <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/pagedown/1.0/Markdown.Editor.min.js"></script>\n')
         html += Markup(' <link rel="stylesheet" type="text/css" href="' + url_for('mathdown.static', filename='wmd.css') + '"></style>\n')
-        html += Markup(' <script src="' + url_for('mathdown.static', filename='mathjax-editing.js') + '"></script>\n')
+        html += Markup(' <script src="' + url_for('mathdown.static', filename='mathjax-editing.js') + '"></script>')
         return html
     
-    def html_head(self):
-        return self.include_pagedown()
+       
+    def include_mathdown(self):
+        html = self.html_head()
+        html += Markup(''' <script type="text/javascript">
+	var converter = Markdown.getSanitizingConverter();
+	window.addEventListener("load", function () {
+		var x = document.getElementsByClassName("mathdown");
+		for (var i = 0; i < x.length; i++) {
+			var text = x[i].textContent;
+            x[i].innerHTML = converter.makeHtml(text);
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, x[i]]);
+		}
+    });
+ </script>
+ ''')
+        return html
         
+       
 
 class MathDown(object):
     def __init__(self, app=None):

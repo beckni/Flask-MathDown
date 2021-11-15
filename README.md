@@ -1,97 +1,96 @@
-Flask-PageDown
+Flask-MathDown
 ==============
 
-[![Build status](https://github.com/miguelgrinberg/Flask-PageDown/workflows/build/badge.svg)](https://github.com/miguelgrinberg/Flask-PageDown/actions)
+[![Build status](https://github.com/beckni/Flask-MathDown/workflows/build/badge.svg)](https://github.com/beckni/Flask-MathDown/actions)
 
-Implementation of StackOverflow's "PageDown" markdown editor for Flask and Flask-WTF.
+Implementation of StackOverflow's "PageDown" markdown editor with MathJax support for Flask and Flask-WTF.
 
-What is PageDown?
+What are PageDown and MathJax?
 -----------------
 
-[PageDown](https://code.google.com/p/pagedown/wiki/PageDown) is the JavaScript [Markdown](http://daringfireball.net/projects/markdown/) previewer used on [Stack Overflow](http://stackoverflow.com/) and all the other question and answer sites in the [Stack Exchange network](http://stackexchange.com/).
+[PageDown](https://code.google.com/p/PageDown/wiki/PageDown) is the JavaScript [Markdown](http://daringfireball.net/projects/markdown/) editor used on [Stack Overflow](http://stackoverflow.com/) and all the other question and answer sites in the [Stack Exchange network](http://stackexchange.com/).
 
-Flask-PageDown provides a `PageDownField` class that extends [Flask-WTF](https://flask-wtf.readthedocs.org/en/latest/) with a specialized text area field that renders an HTML preview of the Markdown text on the fly as you type.
+Flask-MathDown provides a `MathDownField` class that extends [Flask-WTF](https://flask-wtf.readthedocs.org/en/latest/) with a specialized text area field that renders an HTML preview of the Markdown text on the fly as you type.
 
 Installation
 ------------
 
-    $ pip install flask-pagedown
+    $ pip install flask-MathDown
 
 Example
 -------
 
-An example is worth a thousand words. Below is how to define a simple Flask-WTF form that includes a PageDown field:
+The extension needs to be initialized in the usual way before it can be used:
 
-    from flask_wtf import Form
-    from flask_pagedown.fields import PageDownField
-    from wtforms.fields import SubmitField
+    from flask_MathDown import MathDown
     
-    class PageDownFormExample(Form):
-        pagedown = PageDownField('Enter your markdown')
-        submit = SubmitField('Submit')
+    app = Flask(__name__)
+    MathDown = MathDown(app)
+	
+Static markdown text including math formulas can be rendered on the client side by calling `MathDown.include_mathdown()` in the template and 
+adding the class `markdown` to the div containing the text.
 
-The `PageDownField` works exactly like a `TextAreaField` (in fact it is a subclass of it). The handling in view functions is identical. For example:
+	<html>
+	<head>
+	{{ mathdown.include_mathdown() }}
+	</head>
+	<body>
+		<div class = "markdown">
+			# Markdown example
+			
+			this will be rendered on the client side including *math* like $f(x) = x^2$.
+		</div>
+	</body>
+	</html>
+
+To display an editor with a button bar and a preview window, create a form deriving from Flask-WTF's FlaskForm:
+
+	from flask_wtf import FlaskForm
+	from flask_mathdown import MathDown
+	from flask_mathdown.fields import MathDownField
+	from wtforms.fields import SubmitField
+	
+	class MathDownFormExample(FlaskForm):
+		mathdown = MathDownField('Enter your markdown')
+		submit = SubmitField('Submit')
+		
+The `MathDownField` works exactly like a `TextAreaField` (in fact it is a subclass of it). The handling in view functions is identical. For example:
 
     @app.route('/', methods = ['GET', 'POST'])
     def index():
-        form = PageDownFormExample()
+        form = MathDownFormExample()
         if form.validate_on_submit():
-            text = form.pagedown.data
+            text = form.mathdown.data
             # do something interesting with the Markdown text
-        return render_template('index.html', form = form)
-
-The extension needs to be initialized in the usual way before it can be used:
-
-    from flask_pagedown import PageDown
-    
-    app = Flask(__name__)
-    pagedown = PageDown(app)
-
-Finally, the template needs the support Javascript code added, by calling `pagedown.include_pagedown()` somewhere in the page:
+        return render_template('index.html', form = form)		
+		
+Finally, the template needs the support Javascript code added, by calling `mathdown.include_mathdown_editor()` somewhere in the page:
 
     <html>
     <head>
-    {{ pagedown.include_pagedown() }}
+    {{ mathdown.include_mathdown_editor() }}
     </head>
     <body>
         <form method="POST">
             {{ form.hidden_tag() }}
-            {{ form.pagedown(rows=10) }}
+            {{ form.mathdown(rows=10) }}
             {{ form.submit }}
         </form>
     </body>
-    </html>
+    </html>		
 
-The Javascript classes are imported from a CDN, there are no static files that need to be served by the application. If the request is secure then the Javascript files are imported from an https:// URL to match.
-
-If you prefer to use your own JavaScript source files, you can simply include your Converter and Sanitizer files directly in the HTML page instead of calling `pagedown.include_pagedown()`:
-
-    <html>
-    <head>
-        <script type="text/javascript" src="https://mycdn/path/to/converter.min.js"></script>
-        <script type="text/javascript" src="https://mycdn/path/to/sanitizer.min.js"></script>
-    </head>
-    <body>
-        <form method="POST">
-            {{ form.hidden_tag() }}
-            {{ form.pagedown(rows=10) }}
-            {{ form.submit }}
-        </form>
-    </body>
-    </html>
-
-To help adding specific CSS styling the `<textarea>` element has class `flask-pagedown-input` and the preview `<div>` has class `flask-pagedown-preview`.
+To help adding specific CSS styling the `<textarea>` element has class `flask-mathdown-input` and the preview `<div>` has class `flask-mathdown-preview`.
 
 With the template above, the preview area is created by the extension right below the input text area. For greater control, it is also possible to render the input and preview areas on different parts of the page. The following example shows how to render the preview area above the input area:
 
     <html>
     <head>
-    {{ pagedown.include_pagedown() }}
+    {{ mathdown.include_mathdown_editor() }}
     </head>
     <body>
         <form method="POST">
-            {{ form.pagedown(only_preview=True) }}
-            {{ form.pagedown(only_input=True, rows=10) }}
+            {{ form.mathdown(only_preview=True) }}
+            {{ form.mathdown(only_input=True, rows=10) }}
             {{ form.submit }}
         </form>
     </body>
@@ -99,10 +98,5 @@ With the template above, the preview area is created by the extension right belo
 
 Note that in all cases the submitted text will be the raw Markdown text. The rendered HTML is only used for the preview, if you need to render to HTML in the server then use a server side Markdown renderer like [Flask-Markdown](http://pythonhosted.org/Flask-Markdown/).
 
-Also note that the current version does not include a toolbar like the one used by Stack Overflow.
 
-## Resources
-
-- [PyPI](https://pypi.python.org/pypi/flask-pagedown)
-- [Change Log](https://github.com/miguelgrinberg/flask-pagedown/blob/main/CHANGES.md)
 

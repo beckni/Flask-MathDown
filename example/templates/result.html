@@ -1,0 +1,17 @@
+<html>
+<head>
+{{ mathdown.include_mathdown() }}
+</head>
+<body>
+    <h1>Flask-MathDown Demo</h1>
+    <div>
+	{% for text in texts %}
+        <div class="mathdown">{{ text }}</div>
+		{% if not loop.last %}
+		<hr>
+		{% endif %}
+	{% endfor %}
+    </div>
+
+</body>
+</html>

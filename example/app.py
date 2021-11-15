@@ -23,6 +23,7 @@ def index():
     if form.validate_on_submit():
         text = form.mathdown.data
         text2 = form.mathdown2.data
+        return render_template('result.html', texts=[text, text2])
     else:
         form.mathdown.data = ('# This is demo #1 of Flask-MathDown\n'
                               '**Markdown** is rendered on the fly in the '
