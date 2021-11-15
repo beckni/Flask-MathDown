@@ -10,7 +10,9 @@ What are PageDown and MathJax?
 
 [PageDown](https://code.google.com/p/PageDown/wiki/PageDown) is the JavaScript [Markdown](http://daringfireball.net/projects/markdown/) editor used on [Stack Overflow](http://stackoverflow.com/) and all the other question and answer sites in the [Stack Exchange network](http://stackexchange.com/).
 
-Flask-MathDown provides a `MathDownField` class that extends [Flask-WTF](https://flask-wtf.readthedocs.org/en/latest/) with a specialized text area field that renders an HTML preview of the Markdown text on the fly as you type.
+[MathJax](https://www.mathjax.org) is a JavaScript display engine for mathematics that is used on [math.stackexchange](https://math.stackexchange.com).
+
+Flask-MathDown provides a `MathDownField` class that extends [Flask-WTF](https://flask-wtf.readthedocs.org/en/latest/) with a specialized text area field that renders an HTML preview of the Markdown and math text on the fly as you type.
 
 Installation
 ------------
@@ -38,7 +40,7 @@ adding the class `markdown` to the div containing the text.
 		<div class = "markdown">
 			# Markdown example
 			
-			this will be rendered on the client side including *math* like $f(x) = x^2$.
+			This text will be rendered on the client side including *math* like $f(x) = x^2$.
 		</div>
 	</body>
 	</html>
