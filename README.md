@@ -3,12 +3,12 @@ Flask-MathDown
 
 [![Build status](https://github.com/beckni/Flask-MathDown/workflows/build/badge.svg)](https://github.com/beckni/Flask-MathDown/actions)
 
-Implementation of StackOverflow's "PageDown" markdown editor with MathJax support for Flask and Flask-WTF.
+Implementation of StackOverflow's "PageDown" markdown editor with markdown-it and MathJax support for Flask and Flask-WTF.
 
-What are PageDown and MathJax?
+What are PageDown, markdown-it and MathJax?
 -----------------
 
-[PageDown](https://code.google.com/p/PageDown/wiki/PageDown) is the JavaScript [Markdown](http://daringfireball.net/projects/markdown/) editor used on [Stack Overflow](http://stackoverflow.com/) and all the other question and answer sites in the [Stack Exchange network](http://stackexchange.com/).
+[PageDown](https://code.google.com/p/PageDown/wiki/PageDown) is the JavaScript [Markdown](http://daringfireball.net/projects/markdown/) editor tha was used on [Stack Overflow](http://stackoverflow.com/) and all the other question and answer sites in the [Stack Exchange network](http://stackexchange.com/). The markdown converter was later replaced by [markdown-it](https://github.com/markdown-it/markdown-it).
 
 [MathJax](https://www.mathjax.org) is a JavaScript display engine for mathematics that is used on [math.stackexchange](https://math.stackexchange.com).
 

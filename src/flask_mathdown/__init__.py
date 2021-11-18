@@ -12,13 +12,15 @@ class _mathdown(object):
  });
  </script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML-full"></script>
- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/pagedown/1.0/Markdown.Converter.min.js"></script>
- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/pagedown/1.0/Markdown.Sanitizer.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.2.0/markdown-it.js" 
+integrity="sha512-ivJskyHEWoa1WrFlVDWM7o8I7ZKt2dF97kUVMKHT4CPSWxZ7VHuCydjiED3pjOpN0WuT2XA3pK4HrZYNsZ4OqA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
  ''')
+        
         return html
 
     def include_mathdown_editor(self):
         html = self.html_head()
+        html += Markup(' <script src="' + url_for('mathdown.static', filename='Markdown.Converter.js') + '"></script>')
         html += Markup(' <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/pagedown/1.0/Markdown.Editor.min.js"></script>\n')
         html += Markup(' <link rel="stylesheet" type="text/css" href="' + url_for('mathdown.static', filename='wmd.css') + '"></style>\n')
         html += Markup(' <script src="' + url_for('mathdown.static', filename='mathjax-editing.js') + '"></script>')
@@ -28,12 +30,12 @@ class _mathdown(object):
     def include_mathdown(self):
         html = self.html_head()
         html += Markup(''' <script type="text/javascript">
-	var converter = Markdown.getSanitizingConverter();
+    var md = window.markdownit();
 	window.addEventListener("load", function () {
 		var x = document.getElementsByClassName("mathdown");
 		for (var i = 0; i < x.length; i++) {
 			var text = x[i].textContent;
-            x[i].innerHTML = converter.makeHtml(text);
+            x[i].innerHTML = md.render(text);
             MathJax.Hub.Queue(["Typeset", MathJax.Hub, x[i]]);
 		}
     });

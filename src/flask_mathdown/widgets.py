@@ -7,7 +7,7 @@ preview_html = '''
 <div class="flask-mathdown-preview" id="wmd-preview-%(field)s"></div>
  <script type="text/javascript">
     window.addEventListener("load", function () {
-        var converter = Markdown.getSanitizingConverter();
+        var converter = new Markdown.Converter()
         var editor = new Markdown.Editor(converter, "-%(field)s");
         var mathjaxEditing = createMathjaxEditing();
         mathjaxEditing.prepareWmdForMathJax(editor, "-%(field)s", [['$']])
