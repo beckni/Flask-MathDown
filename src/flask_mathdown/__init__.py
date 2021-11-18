@@ -21,6 +21,7 @@ integrity="sha512-ivJskyHEWoa1WrFlVDWM7o8I7ZKt2dF97kUVMKHT4CPSWxZ7VHuCydjiED3pjO
 
     def include_mathdown_editor(self):
         html = self.html_head()
+        html += Markup(' <script src="' + url_for('mathdown.static', filename='Markdown.Converter.js') + '"></script>')
         html += Markup(' <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/pagedown/1.0/Markdown.Editor.min.js"></script>\n')
         html += Markup(' <link rel="stylesheet" type="text/css" href="' + url_for('mathdown.static', filename='wmd.css') + '"></style>\n')
         html += Markup(' <script src="' + url_for('mathdown.static', filename='mathjax-editing.js') + '"></script>')
@@ -30,12 +31,12 @@ integrity="sha512-ivJskyHEWoa1WrFlVDWM7o8I7ZKt2dF97kUVMKHT4CPSWxZ7VHuCydjiED3pjO
     def include_mathdown(self):
         html = self.html_head()
         html += Markup(''' <script type="text/javascript">
-	var converter = Markdown.getSanitizingConverter();
+    var md = window.markdownit();
 	window.addEventListener("load", function () {
 		var x = document.getElementsByClassName("mathdown");
 		for (var i = 0; i < x.length; i++) {
 			var text = x[i].textContent;
-            x[i].innerHTML = converter.makeHtml(text);
+            x[i].innerHTML = md.render(text);
             MathJax.Hub.Queue(["Typeset", MathJax.Hub, x[i]]);
 		}
     });
