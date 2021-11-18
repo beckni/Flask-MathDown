@@ -15,7 +15,7 @@ class _mathdown(object):
  <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/12.2.0/markdown-it.js" 
 integrity="sha512-ivJskyHEWoa1WrFlVDWM7o8I7ZKt2dF97kUVMKHT4CPSWxZ7VHuCydjiED3pjOpN0WuT2XA3pK4HrZYNsZ4OqA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
  ''')
-        html += Markup(' <script src="' + url_for('mathdown.static', filename='Markdown.Converter.js') + '"></script>\n')
+        html += Markup(' <script type="text/javascript" src="' + url_for('mathdown.static', filename='Markdown.Converter.js') + '"></script>\n')
         html += Markup(' <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/pagedown/1.0/Markdown.Sanitizer.min.js"></script>\n')
         return html
 
@@ -30,12 +30,12 @@ integrity="sha512-ivJskyHEWoa1WrFlVDWM7o8I7ZKt2dF97kUVMKHT4CPSWxZ7VHuCydjiED3pjO
     def include_mathdown(self):
         html = self.html_head()
         html += Markup(''' <script type="text/javascript">
-	var converter = Markdown.getSanitizingConverter();
+    var md = window.markdownit();
 	window.addEventListener("load", function () {
 		var x = document.getElementsByClassName("mathdown");
 		for (var i = 0; i < x.length; i++) {
 			var text = x[i].textContent;
-            x[i].innerHTML = converter.makeHtml(text);
+            x[i].innerHTML = md.render(text);
             MathJax.Hub.Queue(["Typeset", MathJax.Hub, x[i]]);
 		}
     });
