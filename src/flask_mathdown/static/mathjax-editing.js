@@ -230,7 +230,8 @@ function createMathjaxEditing() {
     function RestartMJ() {
         pending = false;
         HUB.cancelTypeset = false; // won't need to do this in the future
-        HUB.Queue(["Typeset", HUB, preview]);
+        HUB.Queue(["resetEquationNumbers",MathJax.InputJax.TeX],
+                  ["Typeset", HUB, preview]);
     }
 
     //
